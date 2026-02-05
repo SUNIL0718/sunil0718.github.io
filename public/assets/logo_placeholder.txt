@@ -1,0 +1,1 @@
+(binary content not supported in this tool, skipping png creation via text, will rely on SVG)
