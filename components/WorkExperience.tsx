@@ -10,71 +10,54 @@ export default function WorkExperience() {
   if (!experienceData || experienceData.type !== "work_experience") return null;
 
   return (
-    <section id="experience" className="py-24 bg-background overflow-hidden">
-      <div className="container mx-auto px-6">
+    <section id="experience" className="py-40 bg-background relative overflow-hidden">
+      <div className="container mx-auto px-6 relative z-10">
         <motion.div
-           initial={{ opacity: 0, y: 20 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           viewport={{ once: true }}
-           className="text-center mb-20"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-32"
         >
-          <h2 className="text-4xl md:text-5xl font-bold font-heading text-primary">
-            {experienceData.title}
+          <p className="text-secondary font-black text-xs uppercase tracking-[0.4em] mb-4">The Journey</p>
+          <h2 className="text-5xl md:text-7xl font-black font-heading tracking-tighter text-primary">
+            Career Timeline
           </h2>
         </motion.div>
 
-        <div className="relative max-w-5xl mx-auto">
-          {/* Vertical Line */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-px bg-gray-200 hidden md:block" />
-
-          <div className="space-y-12 md:space-y-24">
-            {experienceData.items?.map((item: any, idx: number) => {
-              const isEven = idx % 2 === 0;
-              return (
-                <div key={idx} className={`relative flex flex-col md:flex-row items-center ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-                  {/* Timeline Dot */}
-                  <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:translate-y-0 w-4 h-4 rounded-full bg-secondary border-4 border-white shadow-sm hidden md:block z-10" 
-                       style={{ top: '50%' }} />
-
-                  {/* Content Card */}
-                  <div className={`w-full md:w-[45%] ${isEven ? 'md:pr-12' : 'md:pl-12'}`}>
-                    <motion.div
-                      initial={{ opacity: 0, x: isEven ? -50 : 50 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: idx * 0.1 }}
-                      className="bg-white p-8 rounded-3xl border border-border shadow-sm hover:shadow-md transition-shadow relative group"
-                    >
-                      <div className="inline-block px-4 py-1.5 rounded-full bg-accent text-text/60 text-sm font-bold mb-6">
-                        {item.period}
-                      </div>
-                      
-                      <h3 className="text-2xl font-bold text-primary mb-2 flex items-center gap-2">
-                        {item.company}
-                        <span className="w-2 h-2 rounded-full bg-secondary inline-block" />
-                      </h3>
-                      
-                      <div className="flex items-center gap-2 text-secondary font-semibold mb-6">
-                        <Briefcase size={18} />
-                        {item.role}
-                      </div>
-
-                      <ul className="space-y-3">
-                        {item.responsibilities?.map((resp: string, i: number) => (
-                          <li key={i} className="flex items-start gap-3 text-text/70">
-                            <span className="mt-2 w-1.5 h-1.5 rounded-full bg-text/20 shrink-0" />
-                            {resp}
-                          </li>
-                        ))}
-                      </ul>
-                    </motion.div>
-                  </div>
-
-                  {/* Empty space for the other side on desktop */}
-                  <div className="hidden md:block w-[45%]" />
+        <div className="max-w-5xl mx-auto relative">
+          <div className="space-y-32">
+            {experienceData.items?.map((item: any, idx: number) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="flex flex-col md:flex-row gap-12 md:gap-32 items-start"
+              >
+                {/* Year Side */}
+                <div className="md:w-48 shrink-0">
+                  <p className="text-secondary font-black text-4xl italic tracking-tighter mb-2">{item.period.split(' - ')[0]}</p>
+                  <p className="text-text-muted font-black text-xs uppercase tracking-widest">{item.period.split(' - ')[1] || "Current"}</p>
                 </div>
-              );
-            })}
+
+                {/* Content Side */}
+                <div className="flex-1 border-l-2 border-black/5 pl-12 md:pl-20 relative">
+                   <div className="absolute top-2 -left-[9px] w-4 h-4 rounded-full bg-primary" />
+                   
+                   <h3 className="text-3xl md:text-5xl font-black text-primary mb-4 tracking-tighter uppercase">{item.role}</h3>
+                   <p className="text-xl md:text-2xl text-secondary font-bold mb-10 tracking-tight">{item.company}</p>
+                   
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                     {item.responsibilities?.map((resp: string, i: number) => (
+                        <div key={i} className="flex gap-4">
+                           <div className="w-1.5 h-1.5 rounded-full bg-secondary mt-2.5 shrink-0" />
+                           <p className="text-lg text-text-muted font-bold leading-relaxed">{resp}</p>
+                        </div>
+                     ))}
+                   </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>

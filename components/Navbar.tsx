@@ -1,133 +1,86 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
 import { userData } from "@/config/data";
-import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-
-      // Simple active section detection
-      const sections = userData.navigation.map((item) => item.link.substring(1));
-      let current = "";
-
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 100 && rect.bottom >= 100) {
-            current = section;
-            break;
-          }
-        }
-      }
-      if (current) setActiveSection(current);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    setIsOpen(false);
-    const targetId = href.substring(1);
-    const element = document.getElementById(targetId);
-    if (element) {
-      window.scrollTo({
-        top: element.offsetTop - 80, // Offset for fixed header
-        behavior: "smooth",
-      });
-      setActiveSection(targetId);
-    }
-  };
-
   return (
-    <nav
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        scrolled
-          ? "bg-background/90 backdrop-blur-md shadow-sm py-4 border-b border-gray-100/10"
-          : "bg-transparent py-6"
-      )}
-    >
-      <div className="container mx-auto px-6 flex items-center justify-between">
-        <Link
-          href="/"
-          className="relative group z-50 flex items-center gap-2"
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        >
-          {/* Logo Icon */}
-          <img src="/assets/logo.svg" alt="Logo" className="w-8 h-8 md:w-10 md:h-10" />
-          
-          <span className="text-xl md:text-2xl font-bold font-heading text-primary">
-            {userData.site_title.replace("Portfolio of ", "")}
-            <span className="text-secondary">.</span>
-          </span>
-        </Link>
+    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 py-6 px-10`}>
+      <div className={`mx-auto max-w-7xl flex items-center justify-between`}>
+          <Link href="#home" className="flex items-center gap-4 group">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-black text-xl group-hover:bg-secondary group-hover:rotate-12 transition-all">
+              S
+            </div>
+            <span className="text-lg font-black font-heading text-primary tracking-[0.2em] hidden sm:block">
+              {userData.site_title.replace("Portfolio of ", "").toUpperCase()}
+            </span>
+          </Link>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-8">
-          {userData.navigation.map((item, index) => {
-              const isActive = activeSection === item.link.substring(1);
-              return (
-                <a
-                  key={index}
-                  href={item.link}
-                  onClick={(e) => handleLinkClick(e, item.link)}
-                  className={cn(
-                    "font-medium transition-colors relative group text-sm uppercase tracking-wide",
-                    isActive ? "text-primary font-semibold" : "text-text/60 hover:text-primary"
-                  )}
-                >
-                  {item.title}
-                  <span className={cn(
-                      "absolute -bottom-1 left-0 h-0.5 bg-secondary transition-all duration-300",
-                      isActive ? "w-full" : "w-0 group-hover:w-full"
-                  )} />
-                </a>
-              );
-          })}
-        </div>
+          {/* Desktop Nav Sleek */}
+          <div className="hidden lg:flex items-center gap-12">
+            {userData.navigation.map((item, idx) => (
+              <Link
+                key={idx}
+                href={item.link}
+                className="text-xs font-black text-text-muted hover:text-primary transition-colors tracking-widest uppercase"
+              >
+                {item.title}
+              </Link>
+            ))}
+            <Link
+              href="#contact"
+              className="px-8 py-3 rounded-xl bg-primary text-white font-bold text-xs uppercase tracking-widest transition-all hover:bg-secondary shadow-2xl active:scale-95"
+            >
+              Start a Project
+            </Link>
+          </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-text hover:text-primary transition-colors z-50"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle Menu"
-        >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+          {/* Mobile Toggle Sleek */}
+          <button className="lg:hidden text-primary" onClick={() => setIsOpen(!isOpen)}>
+            {isOpen ? <X size={24} /> : <div className="flex flex-col gap-1.5"><div className="w-8 h-1 bg-primary"/><div className="w-5 h-1 bg-primary self-end"/></div>}
+          </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Sleek */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "100vh" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="fixed inset-0 bg-background z-40 flex items-center justify-center md:hidden"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            className="fixed inset-0 z-40 lg:hidden bg-white/95 backdrop-blur-xl px-10 pt-32"
           >
-            <div className="flex flex-col space-y-8 text-center">
-              {userData.navigation.map((item, index) => (
-                <a
-                  key={index}
+            <div className="flex flex-col gap-10">
+              {userData.navigation.map((item, idx) => (
+                <Link
+                  key={idx}
                   href={item.link}
-                  onClick={(e) => handleLinkClick(e, item.link)}
-                  className="text-2xl font-bold text-text hover:text-secondary transition-colors"
+                  className="text-5xl font-black text-primary hover:text-secondary transition-colors font-heading tracking-tight"
+                  onClick={() => setIsOpen(false)}
                 >
                   {item.title}
-                </a>
+                </Link>
               ))}
+              <div className="h-px w-20 bg-primary/10 my-6" />
+              <Link
+                href="#contact"
+                className="text-2xl font-black text-secondary uppercase tracking-widest font-heading"
+                onClick={() => setIsOpen(false)}
+              >
+                Hire Me Now
+              </Link>
             </div>
           </motion.div>
         )}

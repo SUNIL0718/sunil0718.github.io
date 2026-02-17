@@ -3,9 +3,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { userData } from "@/config/data";
-import { Send, Linkedin, Twitter, Github, MessageCircle, Instagram } from "lucide-react";
+import { Send, Linkedin, Github, MessageCircle, FileText, MapPin, Mail, Phone, MessageSquare, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 
 export default function Contact() {
   const contactData = userData.sections.find((s) => s.id === "contact");
@@ -16,143 +15,123 @@ export default function Contact() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormState('submitting');
-    
-    // Simulate API call
     setTimeout(() => {
       setFormState('success');
       (e.target as HTMLFormElement).reset();
-      
-      // Reset after showing success message
-      setTimeout(() => {
-        setFormState('idle');
-      }, 3000);
+      setTimeout(() => setFormState('idle'), 3000);
     }, 2000);
   };
 
   return (
-    <section id="contact" className="py-24 bg-background">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-          {/* Text & Socials */}
+    <section id="contact" className="py-40 bg-background relative overflow-hidden">
+       {/* Background Accent */}
+      <div className="mesh-blob bottom-[-20%] left-[-10%] w-[60rem] h-[60rem] bg-secondary/5" />
+
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="flex flex-col lg:flex-row gap-24 lg:gap-32 items-start max-w-7xl mx-auto">
+          
+          {/* Header & Socials Split */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="flex flex-col justify-center"
+            className="lg:w-[45%]"
           >
-            <h2 className="text-4xl font-bold font-heading mb-6 text-primary">
-              {contactData.title}
+            <p className="text-secondary font-black text-xs uppercase tracking-[0.4em] mb-6">Contact & Inquiries</p>
+            <h2 className="text-6xl md:text-8xl font-black font-heading mb-10 text-primary tracking-tighter leading-[0.9]">
+              Let&apos;s build <br /> <span className="text-secondary opacity-80">the next big</span> <br /> thing.
             </h2>
-            <p className="text-lg text-text/80 mb-10 leading-relaxed">
+            <p className="text-xl text-text-muted mb-16 leading-relaxed font-bold max-w-lg">
               {contactData.description}
             </p>
 
+            <div className="space-y-12 mb-20">
+              <ContactRow Icon={Mail} label="Direct Email" value={contactData.email || "sunil@example.com"} href={`mailto:${contactData.email}`} />
+              <ContactRow Icon={MapPin} label="Office Location" value={contactData.location || "Punjab, India"} />
+              <ContactRow Icon={MessageCircle} label="WhatsApp Me" value={contactData.phone || "+91 XXXXX XXXXX"} href={contactData.social_links?.whatsapp} />
+            </div>
+
             <div className="flex gap-4">
-              {contactData.social_links?.linkedin && (
-                <Link
-                  href={contactData.social_links.linkedin}
-                  className="p-3 rounded-full bg-accent/20 hover:bg-secondary hover:text-white transition-all text-primary"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin size={24} />
-                </Link>
-              )}
-               {contactData.social_links?.twitter && (
-                <Link
-                  href={contactData.social_links.twitter}
-                  className="p-3 rounded-full bg-accent/20 hover:bg-secondary hover:text-white transition-all text-primary"
-                  aria-label="Twitter"
-                >
-                  <Twitter size={24} />
-                </Link>
-              )}
-               {contactData.social_links?.github && (
-                <Link
-                  href={contactData.social_links.github}
-                  className="p-3 rounded-full bg-accent/20 hover:bg-secondary hover:text-white transition-all text-primary"
-                  aria-label="GitHub"
-                >
-                  <Github size={24} />
-                </Link>
-              )}
-               {contactData.social_links?.whatsapp && (
-                <Link
-                  href={contactData.social_links.whatsapp}
-                  className="p-3 rounded-full bg-accent/20 hover:bg-[#25D366] hover:text-white transition-all text-primary"
-                  aria-label="WhatsApp"
-                >
-                  <MessageCircle size={24} />
-                </Link>
-              )}
-               {contactData.social_links?.instagram && (
-                <Link
-                  href={contactData.social_links.instagram}
-                  className="p-3 rounded-full bg-accent/20 hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:text-white transition-all text-primary"
-                  aria-label="Instagram"
-                >
-                  <Instagram size={24} />
-                </Link>
-              )}
+              <SocialIcon Icon={Linkedin} href={contactData.social_links?.linkedin} />
+              <SocialIcon Icon={Github} href={contactData.social_links?.github} />
             </div>
           </motion.div>
 
-          {/* Form */}
+          {/* Form Split */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="bg-accent/10 p-8 rounded-2xl border border-accent/50"
+            className="flex-1 w-full"
           >
-             <form className="space-y-6" onSubmit={handleSubmit}>
-               {contactData.fields?.map((field: string) => (
-                 <div key={field} className="relative">
-                   {field.toLowerCase() === 'message' ? (
-                      <textarea 
-                        name={field.toLowerCase().replace(' ', '_')}
-                        placeholder={field} 
-                        rows={4}
-                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-secondary/50 resize-none"
-                        required
-                      />
-                   ) : (
-                      <input 
-                        name={field.toLowerCase().replace(' ', '_')}
-                        type={
-                          field.toLowerCase() === 'email' ? 'email' : 
-                          field.toLowerCase().includes('mobile') ? 'tel' : 'text'
-                        } 
-                        placeholder={field} 
-                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-secondary/50"
-                        required
-                        {...(field.toLowerCase().includes('mobile') ? {
-                          pattern: "[0-9]{10,15}",
-                          title: "Please enter a valid mobile number (10-15 digits)",
-                          minLength: 10,
-                          maxLength: 15,
-                          onInput: (e) => {
-                            e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
-                          }
-                        } : {})}
-                      />
-                   )}
-                 </div>
-               ))}
-               <button 
-                  type="submit" 
-                  disabled={formState === 'submitting'}
-                  className={`w-full font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 group ${
-                    formState === 'success' 
-                      ? 'bg-green-500 text-white hover:bg-green-600' 
-                      : 'bg-primary text-white hover:bg-primary/90'
-                  } disabled:opacity-70 disabled:cursor-not-allowed`}
-               >
-                 {formState === 'submitting' ? 'Sending...' : formState === 'success' ? 'Message Sent!' : 'Send Message'}
-                 {formState === 'idle' && <Send size={18} className="group-hover:translate-x-1 transition-transform" />}
-               </button>
-             </form>
+            <div className="bento-card p-8 md:p-14 relative overflow-hidden">
+               <form className="grid grid-cols-1 gap-10 relative z-10" onSubmit={handleSubmit}>
+                 {contactData.fields?.map((field: string) => (
+                   <div key={field} className="relative group">
+                     <label className="text-xs font-black uppercase tracking-widest text-text-muted mb-4 block group-focus-within:text-secondary transition-colors italic">{field}</label>
+                     {field.toLowerCase() === 'message' ? (
+                        <textarea 
+                          name={field.toLowerCase().replace(' ', '_')}
+                          placeholder={`How can I help you?`} 
+                          rows={4}
+                          className="w-full bg-transparent border-b-2 border-black/5 py-4 focus:outline-none focus:border-secondary transition-all resize-none font-bold text-xl text-primary"
+                          required
+                        />
+                     ) : (
+                        <input 
+                          name={field.toLowerCase().replace(' ', '_')}
+                          type={field.toLowerCase() === 'email' ? 'email' : 'text'} 
+                          placeholder={field} 
+                          className="w-full bg-transparent border-b-2 border-black/5 py-4 focus:outline-none focus:border-secondary transition-all font-bold text-xl text-primary"
+                          required
+                        />
+                     )}
+                   </div>
+                 ))}
+                 <button 
+                    type="submit" 
+                    disabled={formState === 'submitting'}
+                    className={`group w-full font-black py-8 rounded-[1.5rem] transition-all flex items-center justify-center gap-4 text-2xl mt-6 ${
+                      formState === 'success' 
+                        ? 'bg-green-500 text-white' 
+                        : 'bg-primary text-white hover:bg-secondary'
+                    }`}
+                 >
+                   {formState === 'submitting' ? 'Working...' : formState === 'success' ? 'Got it!' : 'Engage with me'}
+                   {formState === 'idle' && <ArrowRight size={28} className="group-hover:translate-x-2 transition-transform" />}
+                 </button>
+               </form>
+            </div>
           </motion.div>
         </div>
       </div>
     </section>
+  );
+}
+
+function ContactRow({ Icon, label, value, href }: any) {
+  const Card = href ? 'a' : 'div';
+  return (
+    <Card href={href} className="flex items-start gap-6 group">
+      <div className="w-14 h-14 rounded-2xl bg-gray-50 border border-black/5 flex items-center justify-center text-secondary group-hover:bg-secondary group-hover:text-white transition-all duration-500 shadow-sm shrink-0">
+        <Icon size={24} />
+      </div>
+      <div>
+        <p className="text-[10px] text-text-muted font-black uppercase tracking-[0.3em] mb-1">{label}</p>
+        <p className="text-primary font-black text-2xl tracking-tight group-hover:text-secondary transition-colors">{value}</p>
+      </div>
+    </Card>
+  );
+}
+
+function SocialIcon({ Icon, href }: any) {
+  if (!href) return null;
+  return (
+    <Link
+      href={href}
+      className="w-16 h-16 rounded-2xl bg-primary text-white flex items-center justify-center hover:bg-secondary transition-all transform hover:-translate-y-1 shadow-xl"
+    >
+      <Icon size={24} />
+    </Link>
   );
 }

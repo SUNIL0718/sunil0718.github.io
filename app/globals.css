@@ -1,22 +1,98 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #1D1F27;
+  --color-primary: #121212;
   --color-secondary: #4ECCA3;
-  --color-accent: #EFEFEF;
-  --color-background: #FFFFFF;
-  --color-text: #0A0A0A;
-
-  --font-heading: var(--font-inter);
-  --font-body: var(--font-open-sans);
+  --color-background: #FAFAFA;
+  --color-text: #262626;
+  --color-text-muted: #666666;
+  
+  --radius-primary: 1.5rem;
+  --radius-secondary: 1rem;
 }
 
-body {
-  background-color: var(--color-background);
-  color: var(--color-text);
-  font-family: var(--font-body);
+@layer base {
+  body {
+    background-color: #FAFAFA;
+    color: #262626;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    font-family: var(--font-open-sans), sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #121212;
+    font-family: var(--font-inter), sans-serif;
+    letter-spacing: -0.05em;
+  }
+  
+  ::selection {
+    background-color: rgba(78, 204, 163, 0.2);
+  }
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
+@layer utilities {
+  .bento-card {
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 2rem;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .bento-card:hover {
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .mesh-blob {
+    position: absolute;
+    filter: blur(100px);
+    opacity: 0.1;
+    animation: pulse-slow 8s ease-in-out infinite;
+  }
+
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(to right, #121212, rgba(18, 18, 18, 0.8), #4ECCA3);
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 8s ease-in-out infinite;
+  }
+
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+  }
+
+  @keyframes pulse-slow {
+    0%, 100% { transform: scale(1); opacity: 0.1; }
+    50% { transform: scale(1.1); opacity: 0.15; }
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+}
+
+/* Custom Scrollbar Clean */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAFAFA;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 9999px;
+  border: 2px solid #FAFAFA;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
 }

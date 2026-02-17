@@ -2,65 +2,64 @@
 
 import { motion } from "framer-motion";
 import { userData } from "@/config/data";
+import { Layout, Server, Database, Box, Cpu } from "lucide-react";
 
 export default function Skills() {
   const expertiseData = userData.sections.find((s) => s.id === "expertise");
 
   if (!expertiseData || expertiseData.type !== "skills") return null;
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
+  const getIcon = (title: string) => {
+    switch (title.toLowerCase()) {
+      case 'frontend': return <Layout size={28} />;
+      case 'backend': return <Server size={28} />;
+      case 'database': return <Database size={28} />;
+      default: return <Cpu size={28} />;
     }
   };
 
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
-  };
-
   return (
-    <section id="expertise" className="py-20 bg-background overflow-hidden relative">
-      <div className="container mx-auto px-6 relative z-10">
+    <section id="expertise" className="py-40 bg-background relative">
+      <div className="container mx-auto px-6">
         <motion.div
-           initial={{ opacity: 0, y: 30 }}
+           initial={{ opacity: 0, y: 20 }}
            whileInView={{ opacity: 1, y: 0 }}
            viewport={{ once: true }}
-           transition={{ duration: 0.8 }}
-           className="text-center mb-16"
+           className="mb-24"
         >
-          <h2 className="text-4xl md:text-5xl font-bold font-heading mb-4 text-primary">
-            {expertiseData.title || "My Expertise"}
+          <p className="text-secondary font-black text-xs uppercase tracking-[0.4em] mb-4">My Superpowers</p>
+          <h2 className="text-5xl md:text-7xl font-black font-heading tracking-tighter text-primary">
+            Technical Stack
           </h2>
-          <div className="h-1 w-20 bg-secondary mx-auto rounded-full" />
         </motion.div>
 
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {expertiseData.columns?.map((col: any, idx: number) => (
             <motion.div
               key={idx}
-              variants={item}
-              className="bg-accent/10 p-8 rounded-2xl border border-border/50 hover:border-secondary transition-all hover:shadow-lg group"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              className="bento-card p-10 flex flex-col"
             >
-              <h3 className="text-2xl font-bold font-heading mb-4 text-primary group-hover:text-secondary transition-colors">
+              <div className="text-secondary mb-10 group-hover:scale-110 transition-transform">
+                {getIcon(col.title)}
+              </div>
+              
+              <h3 className="text-2xl font-black font-heading mb-4 text-primary">
                 {col.title}
               </h3>
-              <p className="text-text/70 mb-6 leading-relaxed">
+              
+              <p className="text-text-muted mb-10 leading-relaxed text-sm font-bold flex-1">
                 {col.description}
               </p>
+              
               <div className="flex flex-wrap gap-2">
                 {col.stack?.map((tech: string, i: number) => (
                   <span
                     key={i}
-                    className="text-xs font-semibold bg-white text-primary border border-border px-3 py-1 rounded-full shadow-sm"
+                    className="text-[10px] font-black uppercase tracking-widest bg-gray-50 text-text-muted px-4 py-2 rounded-xl border border-black/5 hover:border-secondary transition-colors"
                   >
                     {tech}
                   </span>
@@ -68,11 +67,8 @@ export default function Skills() {
               </div>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
-      
-      {/* Background Decorative Element */}
-       <div className="absolute right-0 top-1/3 w-96 h-96 bg-secondary/5 rounded-full blur-3xl pointer-events-none -translate-x-1/2" />
     </section>
   );
 }

@@ -6,7 +6,7 @@ import { userData } from "@/config/data";
 import { Mail, ArrowRight, MessageCircle, Send } from "lucide-react";
 
 export default function CallToAction() {
-  const ctaData = userData.sections.find((s) => s.id === "final_cta");
+  const ctaData = userData.sections.find((s) => s.id === "final_cta") as any;
   if (!ctaData || ctaData.type !== "cta") return null;
 
   return (
@@ -37,7 +37,7 @@ export default function CallToAction() {
            transition={{ delay: 0.2 }}
            className="flex flex-wrap items-center justify-center gap-4 md:gap-6"
         >
-           {ctaData.buttons?.map((btn: any, idx: number) => {
+           {ctaData.cta_buttons?.map((btn: any, idx: number) => {
              const isPrimary = idx === 0;
              const isWhatsApp = btn.text.toLowerCase().includes('whatsapp');
              

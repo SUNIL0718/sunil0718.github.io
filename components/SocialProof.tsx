@@ -2,46 +2,57 @@
 
 import { motion } from "framer-motion";
 import { userData } from "@/config/data";
-import { Briefcase, Globe, Monitor, Award } from "lucide-react";
+import { 
+  Code, Layout, Server, Database, Palette, Github, Zap
+} from "lucide-react";
 
-const icons: Record<string, any> = {
-  briefcase: Briefcase,
-  globe: Globe,
-  monitor: Monitor,
-  award: Award,
-};
+export default function TechStack() {
+  const stackData = userData.sections.find((s) => s.id === "tech_stack") as any;
 
-export default function SocialProof() {
-  const proofData = userData.sections.find((s) => s.id === "social_proof");
-  if (!proofData || proofData.type !== "social_proof") return null;
+  if (!stackData || stackData.type !== "tech_stack") return null;
+
+  const getIcon = (name: string) => {
+    switch (name.toLowerCase()) {
+      case 'next.js': return <Code size={20} />;
+      case 'react': return <Layout size={20} />;
+      case 'node.js': return <Server size={20} />;
+      case 'mongodb': return <Database size={20} />;
+      case 'tailwind': return <Palette size={20} />;
+      case 'git': return <Github size={20} />;
+      case 'vercel': return <Zap size={20} />;
+      case 'rest apis': return <ZipIcon />;
+      default: return <Code size={20} />;
+    }
+  };
 
   return (
-    <section className="py-10 border-b border-border/40 bg-background/50 backdrop-blur-sm">
-      <div className="container mx-auto px-6">
-        <p className="text-center text-sm font-semibold text-text/40 uppercase tracking-widest mb-8">
-          Trusted By
-        </p>
-        <div className="flex flex-wrap justify-center gap-12 md:gap-20 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-          {proofData.items?.map((item: any, idx: number) => {
-            const Icon = icons[item.icon] || Globe;
-            return (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1 }}
-                viewport={{ once: true }}
-                className="flex items-center gap-3 group"
-              >
-                <Icon size={28} className="text-primary group-hover:text-secondary transition-colors" />
-                <span className="text-xl font-bold text-primary/80 group-hover:text-primary transition-colors">
-                  {item.name}
-                </span>
-              </motion.div>
-            );
-          })}
+    <section className="py-20 bg-background border-y border-black/5 overflow-hidden">
+      <div className="container mx-auto px-6 mb-12 text-center md:text-left">
+        <p className="text-text-muted text-xs font-black uppercase tracking-[0.3em]">{stackData.title}</p>
+      </div>
+
+      <div className="flex overflow-hidden group">
+        <div className="flex animate-marquee gap-8 whitespace-nowrap py-4">
+           {([...(stackData.items || []), ...(stackData.items || [])]).map((item: any, idx: number) => (
+             <div 
+               key={idx}
+               className="flex items-center gap-4 px-8 py-4 rounded-2xl bg-white border border-black/5 hover:border-secondary/30 transition-all group/item shadow-sm"
+             >
+                <span className="text-secondary group-hover/item:scale-110 transition-transform">{getIcon(item.name)}</span>
+                <span className="text-primary font-bold tracking-wider">{item.name}</span>
+             </div>
+           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function ZipIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M7 15 5 9 12 17 19 9 17 15" />
+      <path d="M12 9V2" />
+    </svg>
   );
 }

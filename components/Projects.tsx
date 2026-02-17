@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { userData } from "@/config/data";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Github, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function Projects() {
@@ -18,78 +18,112 @@ export default function Projects() {
   );
 
   return (
-    <section id="work" className="py-24 bg-background">
+    <section id="work" className="py-40 bg-background relative">
       <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold font-heading mb-10 text-primary">
-            {projectsData.title || "Featured Projects"}
-          </h2>
+        <div className="flex flex-col md:flex-row items-end justify-between mb-24 gap-12">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <p className="text-secondary font-black text-xs uppercase tracking-[0.4em] mb-4">Case Studies</p>
+            <h2 className="text-5xl md:text-8xl font-black font-heading tracking-tighter text-primary">
+              Featured Work
+            </h2>
+          </motion.div>
           
-          {/* Filters */}
-          <div className="flex flex-wrap justify-center gap-4">
+          {/* Minimalist Filters */}
+          <div className="flex flex-wrap gap-2">
             {projectsData.filters?.map((f: string) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
                 className={cn(
-                  "px-8 py-2.5 rounded-full text-sm font-semibold transition-all duration-300",
+                  "px-8 py-3 rounded-full text-xs font-black uppercase tracking-widest transition-all",
                   filter === f
-                    ? "bg-primary text-white shadow-xl shadow-primary/20 scale-105"
-                    : "bg-white text-text/60 border border-gray-100 hover:border-primary/30 hover:bg-gray-50"
+                    ? "bg-primary text-white"
+                    : "bg-transparent text-text-muted hover:text-secondary"
                 )}
               >
                 {f}
               </button>
             ))}
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div 
-          layout 
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10"
-        >
+        <div className="flex flex-col gap-32">
           <AnimatePresence mode="popLayout">
             {filteredProjects?.map((project: any, idx: number) => (
               <motion.div
                 key={project.title}
                 layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.4 }}
-                className="group relative aspect-[16/10] rounded-[2.5rem] overflow-hidden shadow-2xl bg-gray-100"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className={cn(
+                  "flex flex-col lg:flex-row gap-16 lg:gap-32 items-center",
+                  idx % 2 === 1 ? "lg:flex-row-reverse" : ""
+                )}
               >
-                <img
-                  src={project.images[0]}
-                  alt={project.title}
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
+                {/* Project Image Box */}
+                <div className="flex-1 w-full group">
+                  <div className="relative aspect-[16/10] rounded-[3rem] overflow-hidden bg-gray-100 shadow-2xl">
+                    <img
+                      src={project.images[0]}
+                      alt={project.title}
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-[1.5s]"
+                    />
+                    <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                       <Link 
+                        href={project.project_link || "#"}
+                        className="w-24 h-24 rounded-full bg-white flex items-center justify-center text-primary scale-0 group-hover:scale-100 transition-transform duration-500 hover:bg-secondary hover:text-white"
+                       >
+                         <ArrowUpRight size={32} />
+                       </Link>
+                    </div>
+                  </div>
+                </div>
                 
-                {/* Overlay Text Container */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8 md:p-12">
-                  <motion.h3 
-                    className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight"
-                  >
+                {/* Project Content Box */}
+                <div className="flex-1">
+                  <p className="text-secondary font-black text-xs uppercase tracking-widest mb-6">{project.categories.join(' & ')}</p>
+                  <h3 className="text-4xl md:text-6xl font-black font-heading mb-8 text-primary tracking-tighter">
                     {project.title}
-                  </motion.h3>
+                  </h3>
                   
-                  <Link
-                    href={project.project_link || "#"}
-                    className="inline-flex items-center gap-2 text-white/90 font-semibold text-lg hover:text-white transition-colors group/link"
-                  >
-                    View Case Study 
-                    <ExternalLink size={20} className="transform group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-transform" />
-                  </Link>
+                  <p className="text-xl md:text-2xl text-text-muted font-bold leading-relaxed mb-12">
+                    {project.description}
+                  </p>
+
+                  <div className="flex flex-wrap gap-4 mb-16">
+                    {project.stack?.map((tech: string, i: number) => (
+                      <span key={i} className="text-xs font-black text-primary px-5 py-2.5 rounded-2xl bg-gray-50 border border-black/5">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  
+                  <div className="flex items-center gap-10">
+                    <Link
+                      href={project.github_link || "#"}
+                      className="flex items-center gap-3 text-primary font-black text-lg hover:text-secondary transition-colors"
+                    >
+                      <Github size={24} />
+                      Source Code
+                    </Link>
+                    <Link
+                      href={project.project_link || "#"}
+                      className="flex items-center gap-3 text-primary font-black text-lg hover:text-secondary transition-colors"
+                    >
+                      <ExternalLink size={24} />
+                      Live Preview
+                    </Link>
+                  </div>
                 </div>
               </motion.div>
             ))}
           </AnimatePresence>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
