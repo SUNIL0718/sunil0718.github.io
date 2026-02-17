@@ -8,37 +8,50 @@ export default function Footer() {
   const contactData = userData.sections.find((s) => s.id === "contact");
 
   return (
-    <footer className="bg-background pt-20 pb-10 border-t border-black/5 relative grid-bg">
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-10 mb-16">
-          <div className="text-center md:text-left">
-            <Link href="#home" className="text-3xl font-black font-heading text-primary tracking-tighter mb-4 block">
-              SUNIL<span className="text-secondary">.</span>
+    <footer className="bg-background dark:bg-background pt-32 pb-12 border-t border-black/5 dark:border-white/10 relative transition-colors duration-500">
+      <div className="container mx-auto px-10 relative z-10">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-16 mb-24">
+          <div className="text-left">
+            <Link href="#home" className="text-4xl font-black font-heading text-primary dark:text-white tracking-tighter mb-6 block group">
+              SUNIL<span className="text-secondary group-hover:rotate-12 transition-transform inline-block">.</span>
             </Link>
-            <p className="text-text-muted max-w-xs font-bold">
-              Building high-performance digital products for the modern web.
+            <p className="text-text-muted dark:text-white/40 max-w-sm font-medium text-lg leading-relaxed">
+              Building high-performance digital products and scalable systems for the modern web.
             </p>
           </div>
 
-          <div className="flex gap-6">
-            <FooterIcon Icon={Github} href={contactData?.social_links?.github} />
-            <FooterIcon Icon={Linkedin} href={contactData?.social_links?.linkedin} />
-            <FooterIcon Icon={MessageCircle} href={contactData?.social_links?.whatsapp} />
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-12 lg:gap-24">
+             <div>
+                <p className="text-secondary font-black text-xs uppercase tracking-[0.3em] mb-8 italic">Navigation</p>
+                <div className="flex flex-col gap-4">
+                   {['Home', 'About', 'Work', 'Expertise'].map((item) => (
+                     <Link key={item} href={`#${item.toLowerCase()}`} className="text-primary dark:text-white/60 font-bold hover:text-secondary dark:hover:text-secondary transition-colors">
+                        {item}
+                     </Link>
+                   ))}
+                </div>
+             </div>
+             <div>
+                <p className="text-secondary font-black text-xs uppercase tracking-[0.3em] mb-8 italic">Social</p>
+                <div className="flex flex-col gap-4">
+                   <Link href={contactData?.social_links?.linkedin || "#"} className="text-primary dark:text-white/60 font-bold hover:text-secondary dark:hover:text-secondary transition-colors">LinkedIn</Link>
+                   <Link href={contactData?.social_links?.github || "#"} className="text-primary dark:text-white/60 font-bold hover:text-secondary dark:hover:text-secondary transition-colors">GitHub</Link>
+                   <Link href={contactData?.social_links?.whatsapp || "#"} className="text-primary dark:text-white/60 font-bold hover:text-secondary dark:hover:text-secondary transition-colors">WhatsApp</Link>
+                </div>
+             </div>
           </div>
         </div>
 
-        <div className="h-px w-full bg-black/5 mb-10" />
+        <div className="h-px w-full bg-black/5 dark:bg-white/5 mb-12" />
 
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-text-muted text-sm font-bold">
-            {userData.footer.text}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+          <p className="text-text-muted dark:text-white/20 text-sm font-bold tracking-tight">
+            &copy; {new Date().getFullYear()} Sunil. {userData.footer.text}
           </p>
           <div className="flex gap-8">
-            {userData.footer.links.map((link, i) => (
-              <Link key={i} href="#" className="text-xs font-black text-text-muted hover:text-primary transition-colors uppercase tracking-widest">
-                {link}
-              </Link>
-            ))}
+            <p className="text-[10px] font-black text-text-muted dark:text-white/20 uppercase tracking-widest italic">
+               Made with excellence in India
+            </p>
           </div>
         </div>
       </div>

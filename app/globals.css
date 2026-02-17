@@ -1,28 +1,51 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #121212;
+  /* Dynamic color palette from data.ts */
+  --color-primary: #1D1F27;
+  --color-primary-foreground: #FFFFFF;
   --color-secondary: #4ECCA3;
-  --color-background: #FAFAFA;
-  --color-text: #262626;
+  --color-accent: #EFEFEF;
+  --color-background: #FFFFFF;
+  --color-text: #0A0A0A;
   --color-text-muted: #666666;
   
   --radius-primary: 1.5rem;
   --radius-secondary: 1rem;
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
+  :root {
+    --color-primary: #1D1F27;
+    --color-primary-foreground: #FFFFFF;
+    --color-secondary: #4ECCA3;
+    --color-background: #FFFFFF;
+    --color-text: #0A0A0A;
+  }
+
+  .dark {
+    --color-primary: #FAFAFA;
+    --color-primary-foreground: #0A0A0A; /* Dark text on light backgrounds */
+    --color-background: #0A0A0A;
+    --color-text: #D1D1D1;
+    --color-text-muted: #888888;
+    --color-accent: #1D1F27;
+  }
+
   body {
-    background-color: #FAFAFA;
-    color: #262626;
+    background-color: var(--color-background);
+    color: var(--color-text);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     font-family: var(--font-open-sans), sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    color: #121212;
+    color: var(--color-primary);
     font-family: var(--font-inter), sans-serif;
     letter-spacing: -0.05em;
   }
@@ -34,8 +57,8 @@
 
 @layer utilities {
   .bento-card {
-    background-color: #FFFFFF;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    background-color: var(--color-background);
+    border: 1px solid rgba(128, 128, 128, 0.1);
     border-radius: 2rem;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -56,7 +79,7 @@
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
-    background-image: linear-gradient(to right, #121212, rgba(18, 18, 18, 0.8), #4ECCA3);
+    background-image: linear-gradient(to right, var(--color-primary), var(--color-secondary));
   }
 
   .animate-pulse-slow {
@@ -84,15 +107,15 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #FAFAFA;
+  background: var(--color-background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(128, 128, 128, 0.2);
   border-radius: 9999px;
-  border: 2px solid #FAFAFA;
+  border: 2px solid var(--color-background);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(128, 128, 128, 0.3);
 }

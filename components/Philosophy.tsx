@@ -10,12 +10,12 @@ export default function Philosophy() {
   if (!philData || philData.type !== "philosophy") return null;
 
   return (
-    <section className="py-40 bg-primary relative overflow-hidden">
+    <section className="py-40 bg-primary dark:bg-background relative overflow-hidden transition-colors duration-500">
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-secondary/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
       <div className="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-secondary/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2" />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-10 relative z-10">
         <div className="max-w-6xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -32,7 +32,7 @@ export default function Philosophy() {
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
              transition={{ duration: 0.8, delay: 0.2 }}
-             className="text-4xl md:text-5xl lg:text-7xl font-black font-heading mb-16 text-white italic leading-tight tracking-tighter"
+             className="text-4xl md:text-5xl lg:text-7xl font-black font-heading mb-16 text-white italic leading-[1.1] tracking-tighter"
           >
             &quot;{philData.quote}&quot;
           </motion.h2>

@@ -3,10 +3,10 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import AboutMe from "@/components/AboutMe";
-import TechStack from "@/components/SocialProof";
 import Skills from "@/components/Skills";
 import Philosophy from "@/components/Philosophy";
 import Projects from "@/components/Projects";
+import GitHubProof from "@/components/GitHubProof";
 import WorkExperience from "@/components/WorkExperience";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -17,10 +17,10 @@ export default function Home() {
       <Navbar />
       <Hero />
       <AboutMe />
-      <TechStack />
       <Skills />
       <Philosophy />
       <Projects />
+      <GitHubProof />
       <WorkExperience />
       <div id="contact-form-section">
         <Contact />
