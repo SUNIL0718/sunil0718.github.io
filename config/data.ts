@@ -111,7 +111,7 @@ export const userData = {
               "SEO & Performance Optimized"
             ],
             stack: ["Next.js", "Node.js", "MongoDB", "Tailwind CSS"],
-            images: ["/assets/projects/kayess.jpg"],
+            images: ["/assets/projects/kayess/hero-slide1.jpg", "/assets/projects/kayess/hero-slide2.jpg", "/assets/projects/kayess/hero-slide3.jpg"],
             project_link: "https://www.ksexim.com/",
             github_link: "#"
           }

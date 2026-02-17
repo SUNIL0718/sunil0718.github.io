@@ -33,13 +33,13 @@ export default function Projects() {
           </motion.div>
           
           {/* Minimalist Filters */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-nowrap overflow-x-auto no-scrollbar gap-2 pb-2">
             {projectsData.filters?.map((f: string) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
                 className={cn(
-                  "px-8 py-3 rounded-full text-xs font-black uppercase tracking-widest transition-all",
+                  "px-8 py-3 rounded-full text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap",
                   filter === f
                     ? "bg-primary dark:bg-secondary text-white dark:text-primary-foreground"
                     : "bg-transparent text-text-muted dark:text-white/40 hover:text-secondary"
@@ -51,7 +51,7 @@ export default function Projects() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-40">
+        <div className="flex flex-col gap-40 lg:gap-60">
           <AnimatePresence mode="popLayout">
             {filteredProjects?.map((project: any, idx: number) => (
               <motion.div
@@ -61,50 +61,65 @@ export default function Projects() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 className={cn(
-                  "flex flex-col lg:flex-row gap-16 lg:gap-32 items-center",
+                  "flex flex-col lg:flex-row gap-16 lg:gap-32 items-center relative",
                   idx % 2 === 1 ? "lg:flex-row-reverse" : ""
                 )}
               >
-                {/* Project Image Box */}
-                <div className="flex-1 w-full group">
-                  <div className="relative aspect-[16/10] rounded-[4rem] overflow-hidden bg-gray-100 dark:bg-white/5 shadow-2xl border-8 border-white dark:border-white/5 transition-colors">
-                    <img
-                      src={project.images[0]}
-                      alt={project.title}
-                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-[1.5s]"
-                    />
-                    <div className="absolute inset-0 bg-primary/40 dark:bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
-                       <Link 
-                        href={project.project_link || "#"}
-                        className="w-24 h-24 rounded-full bg-white dark:bg-secondary flex items-center justify-center text-primary scale-0 group-hover:scale-100 transition-transform duration-500 hover:bg-secondary dark:hover:bg-white hover:text-white dark:hover:text-primary"
-                       >
-                         <ArrowUpRight size={32} />
-                       </Link>
+                {/* Immersive Numbering */}
+                <span className={cn(
+                  "absolute top-[-4rem] font-black text-[12rem] lg:text-[18rem] text-black/5 dark:text-white/5 pointer-events-none select-none z-0",
+                  idx % 2 === 1 ? "left-0" : "right-0"
+                )}>
+                  0{idx + 1}
+                </span>
+
+                {/* Project Image Box with Depth */}
+                <div className="flex-1 w-full group relative z-10">
+                  <div className="relative aspect-[16/10] rounded-[4rem] overflow-hidden bg-gray-100 dark:bg-white/5 shadow-2xl transition-all duration-700">
+                    {/* Background Stack Level */}
+                    <div className="absolute top-4 left-4 w-full h-full rounded-[4rem] border border-secondary/20 pointer-events-none transform -rotate-1 group-hover:rotate-0 transition-transform duration-700" />
+                    
+                    {/* Main image container */}
+                    <div className="relative w-full h-full rounded-[4rem] overflow-hidden border-8 border-white dark:border-white/5 z-10">
+                      <img
+                        src={project.images[0]}
+                        alt={project.title}
+                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-[1.5s]"
+                      />
+                      <div className="absolute inset-0 bg-primary/40 dark:bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm z-20">
+                         <Link 
+                          href={project.project_link || "#"}
+                          className="w-24 h-24 rounded-full bg-white dark:bg-secondary flex items-center justify-center text-primary scale-0 group-hover:scale-100 transition-transform duration-500 hover:bg-secondary dark:hover:bg-white hover:text-white dark:hover:text-primary shadow-2xl"
+                         >
+                           <ArrowUpRight size={32} />
+                         </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
                 
                 {/* Project Content Box */}
-                <div className="flex-1">
-                  <div className="flex flex-wrap gap-3 mb-8">
+                <div className="flex-1 relative z-10">
+                  <div className="flex flex-wrap gap-3 mb-10">
                      {project.categories.map((cat: string, i: number) => (
-                        <span key={i} className="text-secondary font-black text-[10px] uppercase tracking-widest px-3 py-1 bg-secondary/10 rounded-full border border-secondary/20">
+                        <span key={i} className="text-secondary font-black text-[10px] uppercase tracking-widest px-4 py-2 bg-secondary/10 dark:bg-secondary/20 rounded-full border border-secondary/20 backdrop-blur-md">
                            {cat}
                         </span>
                      ))}
                   </div>
-                  <h3 className="text-4xl md:text-6xl font-black font-heading mb-8 text-primary dark:text-white tracking-tighter">
+                  
+                  <h3 className="text-5xl md:text-7xl font-black font-heading mb-8 text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/80 to-secondary dark:from-white dark:via-white/80 dark:to-secondary tracking-tighter">
                     {project.title}
                   </h3>
                   
-                  <p className="text-xl md:text-2xl text-text-muted dark:text-white/60 font-medium leading-relaxed mb-10">
+                  <p className="text-xl md:text-2xl text-text-muted dark:text-white/60 font-medium leading-relaxed mb-12 max-w-xl">
                     {project.description}
                   </p>
 
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 mb-12">
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-5 mb-12">
                     {project.features?.map((feature: string, i: number) => (
-                      <li key={i} className="flex items-start gap-3 text-lg text-text-muted dark:text-white/40 font-medium leading-snug">
-                        <span className="mt-2 w-1.5 h-1.5 rounded-full bg-secondary shrink-0" />
+                      <li key={i} className="flex items-start gap-4 text-lg text-text-muted dark:text-white/40 font-medium leading-tight group">
+                        <span className="mt-2 w-1.5 h-1.5 rounded-full bg-secondary shrink-0 group-hover:scale-125 transition-transform" />
                         {feature}
                       </li>
                     ))}
@@ -112,23 +127,23 @@ export default function Projects() {
 
                   <div className="flex flex-wrap gap-3 mb-16">
                     {project.stack?.map((tech: string, i: number) => (
-                      <span key={i} className="text-[10px] font-black text-primary dark:text-white/40 px-5 py-2.5 rounded-2xl bg-gray-50 dark:bg-white/5 border border-black/5 dark:border-white/10 uppercase tracking-widest">
+                      <span key={i} className="text-[10px] font-black text-primary/60 dark:text-white/40 px-5 py-3 rounded-2xl bg-white/50 dark:bg-white/5 border border-black/5 dark:border-white/10 uppercase tracking-widest backdrop-blur-sm shadow-sm">
                         {tech}
                       </span>
                     ))}
                   </div>
                   
-                  <div className="flex items-center gap-10">
+                  <div className="flex flex-wrap items-center gap-10">
                     <Link
                       href={project.github_link || "#"}
-                      className="flex items-center gap-3 text-primary dark:text-white font-black text-lg hover:text-secondary dark:hover:text-secondary transition-all group"
+                      className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-black/5 dark:bg-white/5 border border-transparent hover:border-secondary text-primary dark:text-white font-black text-lg transition-all group"
                     >
                       <Github size={24} className="group-hover:rotate-12 transition-transform" />
                       Source Code
                     </Link>
                     <Link
                       href={project.project_link || "#"}
-                      className="flex items-center gap-3 text-primary dark:text-white font-black text-lg hover:text-secondary dark:hover:text-secondary transition-all group"
+                      className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-secondary/10 text-secondary hover:bg-secondary hover:text-white dark:hover:text-primary-foreground font-black text-lg transition-all group"
                     >
                       <ExternalLink size={24} className="group-hover:scale-110 transition-transform" />
                       Live Preview
